@@ -1,0 +1,18 @@
+﻿using MediatR;
+using MicroCore.Shared.Extensions;
+using MicroCore.Shared.Filters;
+
+namespace MicroCore.Catalog.API.Features.Categories.Create;
+
+public static class CreateCategoryEndpoint
+{
+    public static RouteGroupBuilder CreateCategoryGroupItemEndpoint(this RouteGroupBuilder group)
+    {
+        group.MapPost("/",async (CreateCategoryCommand command, IMediator mediator) =>(await mediator.Send(command)).ToGenericResult())
+            .WithName("CreateCategory")
+            .AddEndpointFilter<ValidationFilter<CreateCategoryCommand>>();
+
+
+        return group;
+    }
+}

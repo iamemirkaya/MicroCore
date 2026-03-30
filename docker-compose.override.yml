@@ -1,0 +1,69 @@
+version: '3.4'
+
+services:
+  catalogdb:
+    container_name: catalogdb
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    restart: always
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_catalog:/var/lib/postgresql
+  
+  microcore.catalog.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTPS_PORTS=8081
+      - ConnectionStrings__Database=Server=catalogdb;Port=5432;Database=${POSTGRES_DB};User Id=${POSTGRES_USER};Password=${POSTGRES_PASSWORD};Include Error Detail=true
+    ports:
+      - "6000:8080"
+      - "6060:8081"
+    depends_on:
+      - catalogdb
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+  
+
+  basketdb:
+    container_name: basketdb
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=BasketDb 
+    restart: always
+    ports:
+      - "5434:5432" 
+    volumes:
+      - postgres_basket:/var/lib/postgresql
+
+  basketredis:
+    container_name: basketredis
+    restart: always
+    image: redis:alpine
+    ports:
+      - "6379:6379" 
+    volumes:
+      - redis_basket:/data
+
+  # --- BASKET API ---
+  microcore.basket.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTPS_PORTS=8081
+      - ConnectionStrings__Database=Server=basketdb;Port=5432;Database=BasketDb;User Id=${POSTGRES_USER};Password=${POSTGRES_PASSWORD};Include Error Detail=true
+      - ConnectionStrings__Redis=basketredis:6379
+    ports:
+      - "6010:8080" 
+      - "6061:8081" 
+    depends_on:
+      - basketdb
+      - basketredis
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
