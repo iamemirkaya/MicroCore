@@ -21,9 +21,16 @@ services:
     build:
       context: .
       dockerfile: src/Services/Basket/MicroCore.Basket.Api/Dockerfile
+  
+  microcore.discount.grpc:
+    image: ${DOCKER_REGISTRY-}microcorediscountgrpc
+    build:
+      context: .
+      dockerfile: src/Services/Discount/MicroCore.Discount.Grpc/Dockerfile
 
 
 volumes:
   postgres_catalog:
   postgres_basket:
   redis_basket:
+  sqlite_discount:

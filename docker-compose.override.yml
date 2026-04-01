@@ -14,6 +14,7 @@ services:
       - postgres_catalog:/var/lib/postgresql
   
   microcore.catalog.api:
+    container_name: microcore.catalog.api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
@@ -50,8 +51,8 @@ services:
     volumes:
       - redis_basket:/data
 
-  # --- BASKET API ---
   microcore.basket.api:
+    container_name: microcore.basket.api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
@@ -67,3 +68,19 @@ services:
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+ 
+
+  microcore.discount.grpc:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTPS_PORTS=8081
+      - ConnectionStrings__Database=Data Source=discountdb
+    ports:
+      - "6002:8080"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+      - sqlite_discount:/db
+
+ 
