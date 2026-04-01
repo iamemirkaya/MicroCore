@@ -1,4 +1,5 @@
 ﻿using MicroCore.Basket.Api.Const;
+using MicroCore.Shared.Services;
 using Microsoft.Extensions.Caching.Distributed;
 using System.Text.Json;
 
@@ -6,17 +7,18 @@ namespace MicroCore.Basket.Api.Features.Baskets;
 public class BasketService
 {
     private readonly IDistributedCache _distributedCache;
+    private readonly IIdentityService _identityService;
 
 
-    public BasketService(IDistributedCache distributedCache)
+    public BasketService(IDistributedCache distributedCache, IIdentityService identityService)
     {
         _distributedCache = distributedCache;
+        _identityService = identityService;
     }
 
     private string GetCacheKey()
     {
-        var tempUserId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
-        return string.Format(BasketConst.BasketCacheKey, tempUserId ); //_identityService.UserId
+        return string.Format(BasketConst.BasketCacheKey, _identityService.UserId); 
     }
 
     private string GetCacheKey(Guid userId)

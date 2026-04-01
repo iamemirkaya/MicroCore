@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
+using MicroCore.Shared.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 
@@ -15,6 +16,7 @@ public static class CommonServiceExt
 
         services.AddFluentValidationAutoValidation();
         services.AddValidatorsFromAssemblyContaining(assembly);
+        services.AddScoped<IIdentityService, IdentityServiceFake>();
         return services;
     }
 }

@@ -19,7 +19,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroCore.Shared", "src\Sha
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Basket", "Basket", "{99AD90FF-1FB8-4063-811F-78B0F76FC316}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroCore.Basket.Api", "src\Services\Basket\MicroCore.Basket.Api\MicroCore.Basket.Api.csproj", "{A9700D3B-CEDC-4474-A8E4-FC6E49261D40}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroCore.Basket.Api", "src\Services\Basket\MicroCore.Basket.Api\MicroCore.Basket.Api.csproj", "{A9700D3B-CEDC-4474-A8E4-FC6E49261D40}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Discount", "Discount", "{174E06F3-E45F-4C3C-8999-9D20A9E795D5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroCore.Discount.Grpc", "src\Services\Discount\MicroCore.Discount.Grpc\MicroCore.Discount.Grpc.csproj", "{9BEAF892-9B76-4C98-B3AE-B652ACC69D23}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,6 +47,10 @@ Global
 		{A9700D3B-CEDC-4474-A8E4-FC6E49261D40}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A9700D3B-CEDC-4474-A8E4-FC6E49261D40}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A9700D3B-CEDC-4474-A8E4-FC6E49261D40}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9BEAF892-9B76-4C98-B3AE-B652ACC69D23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BEAF892-9B76-4C98-B3AE-B652ACC69D23}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9BEAF892-9B76-4C98-B3AE-B652ACC69D23}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9BEAF892-9B76-4C98-B3AE-B652ACC69D23}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -55,6 +63,8 @@ Global
 		{E33BD4C2-150E-4D98-9104-A4C69BA1FCF9} = {F6580A39-2A35-463C-AC20-A5C723B3987D}
 		{99AD90FF-1FB8-4063-811F-78B0F76FC316} = {996BEB1F-CF9B-4E3D-AC96-1A2C92C9DE0C}
 		{A9700D3B-CEDC-4474-A8E4-FC6E49261D40} = {99AD90FF-1FB8-4063-811F-78B0F76FC316}
+		{174E06F3-E45F-4C3C-8999-9D20A9E795D5} = {996BEB1F-CF9B-4E3D-AC96-1A2C92C9DE0C}
+		{9BEAF892-9B76-4C98-B3AE-B652ACC69D23} = {174E06F3-E45F-4C3C-8999-9D20A9E795D5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FE548031-5BBA-465F-AA80-691FC674289E}

@@ -10,6 +10,7 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["src/Services/Catalog/MicroCore.Catalog.API/MicroCore.Catalog.API.csproj", "src/Services/Catalog/MicroCore.Catalog.API/"]
+COPY ["src/Shared/MicroCore.Shared/MicroCore.Shared.csproj", "src/Shared/MicroCore.Shared/"]
 RUN dotnet restore "./src/Services/Catalog/MicroCore.Catalog.API/MicroCore.Catalog.API.csproj"
 COPY . .
 WORKDIR "/src/src/Services/Catalog/MicroCore.Catalog.API"
