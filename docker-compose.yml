@@ -16,6 +16,12 @@ services:
   basketredis:
     image: redis:alpine
 
+  orderdb:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+
+  paymentdb:
+    image: postgres:latest
+
   microcore.basket.api:
     image: ${DOCKER_REGISTRY-}microcorebasketapi
     build:
@@ -27,10 +33,24 @@ services:
     build:
       context: .
       dockerfile: src/Services/Discount/MicroCore.Discount.Grpc/Dockerfile
+  
+  microcore.order.api:
+    image: ${DOCKER_REGISTRY-}microcoreorderapi
+    build:
+      context: .
+      dockerfile: src/Services/order/api/MicroCore.Order.API/Dockerfile
 
+  microcore.payment.api:
+    image: ${DOCKER_REGISTRY-}microcorepaymentapi
+    build:
+      context: .
+      dockerfile: src/Services/Payment/MicroCore.Payment.Api/Dockerfile
 
+  
 volumes:
   postgres_catalog:
   postgres_basket:
   redis_basket:
   sqlite_discount:
+  mssql_order:
+  postgres_payment:
