@@ -83,4 +83,62 @@ services:
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
       - sqlite_discount:/db
 
+  paymentdb:
+    container_name: paymentdb
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=PaymentDb
+    restart: always
+    ports:
+      - "5435:5432"
+    volumes:
+      - postgres_payment:/var/lib/postgresql
+
+  microcore.payment.api:
+    container_name: microcore.payment.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTPS_PORTS=8081
+      - ConnectionStrings__Database=Server=paymentdb;Port=5432;Database=PaymentDb;User Id=${POSTGRES_USER};Password=${POSTGRES_PASSWORD};Include Error Detail=true
+    ports:
+      - "6004:8080"
+      - "6064:8081"
+    depends_on:
+      - paymentdb
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+
+
+  orderdb:
+    container_name: orderdb
+    user: root 
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=${SA_PASSWORD}
+    restart: always
+    ports:
+      - "1433:1433"
+    volumes:
+      - mssql_order:/var/opt/mssql
+
+
+  microcore.order.api:
+    container_name: microcore.order.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTPS_PORTS=8081
+      - ConnectionStrings__Database=Server=orderdb;Database=OrderDb;User Id=sa;Password=${SA_PASSWORD};TrustServerCertificate=True
+    ports:
+      - "6003:8080"
+      - "6063:8081"
+    depends_on:
+      - orderdb
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+
  
