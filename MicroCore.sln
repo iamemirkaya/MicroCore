@@ -43,11 +43,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroCore.Order.Persistence
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "payment", "payment", "{2CE4527A-55E1-4990-B4D6-55E1D7E1E510}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroCore.Payment.Api", "src\Services\payment\MicroCore.Payment.Api\MicroCore.Payment.Api.csproj", "{28245F31-B56B-465C-B9CD-D77C552CD79A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroCore.Payment.Api", "src\Services\payment\MicroCore.Payment.Api\MicroCore.Payment.Api.csproj", "{28245F31-B56B-465C-B9CD-D77C552CD79A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Gateway", "Gateway", "{2C1C8A5D-0A39-4B0A-956E-2FB3C99F9C7E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroCore.Gateway", "src\Gateway\MicroCore.Gateway\MicroCore.Gateway.csproj", "{22B0C2D2-0C68-4A80-822B-B995F25112B3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroCore.Gateway", "src\Gateway\MicroCore.Gateway\MicroCore.Gateway.csproj", "{22B0C2D2-0C68-4A80-822B-B995F25112B3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroCore.Bus", "src\Shared\MicroCore.Bus\MicroCore.Bus.csproj", "{695B337C-AC0D-4004-A9EE-5CD7E4F09371}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -99,6 +101,10 @@ Global
 		{22B0C2D2-0C68-4A80-822B-B995F25112B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{22B0C2D2-0C68-4A80-822B-B995F25112B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{22B0C2D2-0C68-4A80-822B-B995F25112B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{695B337C-AC0D-4004-A9EE-5CD7E4F09371}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{695B337C-AC0D-4004-A9EE-5CD7E4F09371}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{695B337C-AC0D-4004-A9EE-5CD7E4F09371}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{695B337C-AC0D-4004-A9EE-5CD7E4F09371}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -125,6 +131,7 @@ Global
 		{28245F31-B56B-465C-B9CD-D77C552CD79A} = {2CE4527A-55E1-4990-B4D6-55E1D7E1E510}
 		{2C1C8A5D-0A39-4B0A-956E-2FB3C99F9C7E} = {4FA55138-14D5-4EED-8A57-681617973330}
 		{22B0C2D2-0C68-4A80-822B-B995F25112B3} = {2C1C8A5D-0A39-4B0A-956E-2FB3C99F9C7E}
+		{695B337C-AC0D-4004-A9EE-5CD7E4F09371} = {F6580A39-2A35-463C-AC20-A5C723B3987D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FE548031-5BBA-465F-AA80-691FC674289E}

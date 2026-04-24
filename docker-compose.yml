@@ -46,6 +46,16 @@ services:
       context: .
       dockerfile: src/Services/Payment/MicroCore.Payment.Api/Dockerfile
 
+  keycloakdb:
+    image: postgres:16.2
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:25.0
+    command: start
+
+  rabbitmq:
+    image: rabbitmq:3.13-management
+
   
 volumes:
   postgres_catalog:
@@ -54,3 +64,5 @@ volumes:
   sqlite_discount:
   mssql_order:
   postgres_payment:
+  postgres_keycloak:
+  rabbitmq_data:

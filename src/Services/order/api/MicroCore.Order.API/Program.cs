@@ -6,6 +6,7 @@ using MicroCore.Order.Persistence.Repositories;
 using MicroCore.Order.Persistence.UnitOfWork;
 using MicroCore.Order.Persistence;
 using Microsoft.EntityFrameworkCore;
+using MicroCore.Bus;
 
 
 
@@ -30,6 +31,8 @@ builder.Services.AddScoped(typeof(IGenericRepository<,>), typeof(GenericReposito
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddCommonMasstransitExt(builder.Configuration);
 
 
 

@@ -19,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Shared\MicroCore.Bus\MicroCore.Bus.csproj" />
     <ProjectReference Include="..\..\core\MicroCore.Order.Application\MicroCore.Order.Application.csproj" />
     <ProjectReference Include="..\..\infrastructure\MicroCore.Order.Persistence\MicroCore.Order.Persistence.csproj" />
   </ItemGroup>

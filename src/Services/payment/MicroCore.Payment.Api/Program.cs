@@ -2,6 +2,7 @@ using MicroCore.Payment.Api;
 using Microsoft.EntityFrameworkCore;
 using MicroCore.Shared.Extensions;
 using MicroCore.Payment.Api.Data;
+using MicroCore.Bus;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,8 @@ builder.Services.AddCommonServiceExt(typeof(PaymentAssembly));
 
 builder.Services.AddDbContext<PaymentDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("Database")));
+
+builder.Services.AddCommonMasstransitExt(builder.Configuration);
 
 var app = builder.Build();
 
