@@ -18,7 +18,8 @@ public static class CreateOrderEndpoint
             .Produces(StatusCodes.Status404NotFound)
             .Produces<ProblemDetails>(StatusCodes.Status400BadRequest)
             .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError)
-            .AddEndpointFilter<ValidationFilter<CreateOrderCommand>>();
+            .AddEndpointFilter<ValidationFilter<CreateOrderCommand>>()
+            .RequireAuthorization();
 
         return group;
     }

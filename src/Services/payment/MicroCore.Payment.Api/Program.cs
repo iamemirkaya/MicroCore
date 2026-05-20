@@ -14,6 +14,8 @@ builder.Services.AddCommonServiceExt(typeof(PaymentAssembly));
 builder.Services.AddDbContext<PaymentDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("Database")));
 
+builder.Services.AddAuthenticationAndAuthorizationExt(builder.Configuration);
+
 builder.Services.AddCommonMasstransitExt(builder.Configuration);
 
 var app = builder.Build();

@@ -1,12 +1,11 @@
-using MicroCore.Order.API.Orders;
 using MicroCore.Order.Application.Contracts.Repositories;
 using MicroCore.Order.Application.Contracts.UnitOfWork;
-using MicroCore.Order.Application;
 using MicroCore.Order.Persistence.Repositories;
 using MicroCore.Order.Persistence.UnitOfWork;
 using MicroCore.Order.Persistence;
 using Microsoft.EntityFrameworkCore;
 using MicroCore.Bus;
+using MicroCore.Shared.Extensions;
 
 
 
@@ -34,7 +33,7 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddCommonMasstransitExt(builder.Configuration);
 
-
+builder.Services.AddAuthenticationAndAuthorizationExt(builder.Configuration);
 
 var app = builder.Build();
 

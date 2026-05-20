@@ -24,7 +24,7 @@ builder.Services.AddStackExchangeRedisCache(options =>
 builder.Services.AddDbContext<BasketDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("Database")));
 
-
+builder.Services.AddAuthenticationAndAuthorizationExt(builder.Configuration);
 
 var app = builder.Build();
 

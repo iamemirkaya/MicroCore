@@ -15,6 +15,9 @@ builder.Services.AddCommonServiceExt(typeof(CatalogAssembly));
 builder.Services.AddDbContext<CatalogDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("Database")));
 
+
+builder.Services.AddAuthenticationAndAuthorizationExt(builder.Configuration);
+
 var app = builder.Build();
 
 app.AddCategoryGroupEndpointExt();

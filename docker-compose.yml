@@ -55,6 +55,12 @@ services:
 
   rabbitmq:
     image: rabbitmq:3.13-management
+ 
+  microcore.gateway:
+    image: ${DOCKER_REGISTRY-}microcoregateway
+    build:
+      context: .
+      dockerfile: src/Gateway/MicroCore.Gateway/Dockerfile
 
   
 volumes:

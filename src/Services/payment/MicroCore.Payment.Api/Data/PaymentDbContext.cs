@@ -9,7 +9,7 @@ namespace MicroCore.Payment.Api.Data
         public PaymentDbContext(DbContextOptions<PaymentDbContext> options) : base(options)
         {
         }
-        public DbSet<Payment.Api.Models.Payment> Courses { get; set; }
+        public DbSet<Payment.Api.Models.Payment> Payments { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
