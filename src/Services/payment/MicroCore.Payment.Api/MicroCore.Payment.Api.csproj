@@ -24,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Shared\MicroCore.Bus\MicroCore.Bus.csproj" />
     <ProjectReference Include="..\..\..\Shared\MicroCore.Shared\MicroCore.Shared.csproj" />
   </ItemGroup>
 

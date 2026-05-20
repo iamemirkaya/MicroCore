@@ -13,7 +13,8 @@ public static class GetOrdersEndpoint
             .Produces<Guid>(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status404NotFound)
             .Produces<ProblemDetails>(StatusCodes.Status400BadRequest)
-            .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError);
+            .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError)
+            .RequireAuthorization();
 
 
         return group;
