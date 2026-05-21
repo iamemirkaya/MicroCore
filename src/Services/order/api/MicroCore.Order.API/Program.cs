@@ -1,5 +1,6 @@
 using MicroCore.Order.Application.Contracts.Repositories;
 using MicroCore.Order.Application.Contracts.UnitOfWork;
+using MicroCore.Order.Application.Contracts.Refit;
 using MicroCore.Order.Persistence.Repositories;
 using MicroCore.Order.Persistence.UnitOfWork;
 using MicroCore.Order.Persistence;
@@ -34,6 +35,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddCommonMasstransitExt(builder.Configuration);
 
 builder.Services.AddAuthenticationAndAuthorizationExt(builder.Configuration);
+builder.Services.AddRefitConfigurationExt(builder.Configuration);
 
 var app = builder.Build();
 
