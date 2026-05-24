@@ -2,7 +2,7 @@ version: '3.4'
 
 services:
   catalogdb: 
-    image: postgres:latest
+    image: mysql:8.0.33
 
   microcore.catalog.api:
     image: ${DOCKER_REGISTRY-}microcorecatalogapi
@@ -11,34 +11,37 @@ services:
       dockerfile: src/Services/Catalog/MicroCore.Catalog.API/Dockerfile
 
   basketdb:
-    image: postgres:latest
+    image: mysql:8.0.33
 
   basketredis:
     image: redis:alpine
-
-  orderdb:
-    image: mcr.microsoft.com/mssql/server:2022-latest
-
-  paymentdb:
-    image: postgres:latest
 
   microcore.basket.api:
     image: ${DOCKER_REGISTRY-}microcorebasketapi
     build:
       context: .
       dockerfile: src/Services/Basket/MicroCore.Basket.Api/Dockerfile
+
+  discountdb:
+    image: mysql:8.0.33
   
   microcore.discount.grpc:
     image: ${DOCKER_REGISTRY-}microcorediscountgrpc
     build:
       context: .
       dockerfile: src/Services/Discount/MicroCore.Discount.Grpc/Dockerfile
-  
+
+  orderdb:
+    image: mysql:8.0.33
+
   microcore.order.api:
     image: ${DOCKER_REGISTRY-}microcoreorderapi
     build:
       context: .
       dockerfile: src/Services/order/api/MicroCore.Order.API/Dockerfile
+
+  paymentdb:
+    image: mysql:8.0.33
 
   microcore.payment.api:
     image: ${DOCKER_REGISTRY-}microcorepaymentapi
@@ -47,7 +50,7 @@ services:
       dockerfile: src/Services/Payment/MicroCore.Payment.Api/Dockerfile
 
   keycloakdb:
-    image: postgres:16.2
+    image: mysql:8.0.33
 
   keycloak:
     image: quay.io/keycloak/keycloak:25.0
@@ -62,13 +65,12 @@ services:
       context: .
       dockerfile: src/Gateway/MicroCore.Gateway/Dockerfile
 
-  
 volumes:
-  postgres_catalog:
-  postgres_basket:
+  mysql_catalog:
+  mysql_basket:
   redis_basket:
-  sqlite_discount:
-  mssql_order:
-  postgres_payment:
-  postgres_keycloak:
+  mysql_discount: 
+  mysql_order: 
+  mysql_payment:
+  mysql_keycloak_data:
   rabbitmq_data:

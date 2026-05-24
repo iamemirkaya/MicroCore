@@ -16,6 +16,6 @@ public static class CategoryEndpointExt
         app.MapGroup("api/categories")
             .CreateCategoryGroupItemEndpoint()
             .GetAllCategoryGroupItemEndpoint()
-            .GetByIdCategoryGroupItemEndpoint();
+            .GetByIdCategoryGroupItemEndpoint().RequireAuthorization("Password");
     }
 }

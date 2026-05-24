@@ -10,6 +10,7 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["src/Services/order/api/MicroCore.Order.API/MicroCore.Order.API.csproj", "src/Services/order/api/MicroCore.Order.API/"]
+COPY ["src/Shared/MicroCore.Bus/MicroCore.Bus.csproj", "src/Shared/MicroCore.Bus/"]
 COPY ["src/Services/order/core/MicroCore.Order.Application/MicroCore.Order.Application.csproj", "src/Services/order/core/MicroCore.Order.Application/"]
 COPY ["src/Services/order/core/MicroCore.Order.Domain/MicroCore.Order.Domain.csproj", "src/Services/order/core/MicroCore.Order.Domain/"]
 COPY ["src/Shared/MicroCore.Shared/MicroCore.Shared.csproj", "src/Shared/MicroCore.Shared/"]

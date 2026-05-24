@@ -10,7 +10,7 @@ public static class CreateOrderEndpoint
 {
     public static RouteGroupBuilder CreateOrderGroupItemEndpoint(this RouteGroupBuilder group)
     {
-        group.MapPost("/",
+        group.MapPost("",
                 async ([FromBody] CreateOrderCommand command, [FromServices] IMediator mediator) =>
                 (await mediator.Send(command)))
             .WithName("CreateOrder")

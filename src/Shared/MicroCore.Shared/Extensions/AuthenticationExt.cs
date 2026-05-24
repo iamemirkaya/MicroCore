@@ -26,14 +26,13 @@ public static class AuthenticationExt
                 ValidateIssuerSigningKey = true,
                 ValidateLifetime = true,
                 ValidateIssuer = true,
+                ValidIssuer = identityOptions.Issuer,
                 RoleClaimType = ClaimTypes.Role,
                 NameClaimType = ClaimTypes.NameIdentifier
             };
 
-            // AutomaticRefreshInterval: otomatik aralıkla metadata/JWKS yenileme (ör. 24saat)
             options.AutomaticRefreshInterval = TimeSpan.FromHours(24);
 
-            // RefreshInterval: RequestRefresh() çağrıldıktan sonra beklenen min süre (ör. 30s)
             options.RefreshInterval = TimeSpan.FromSeconds(30);
         }).AddJwtBearer("ClientCredentialSchema", options =>
         {
@@ -46,7 +45,8 @@ public static class AuthenticationExt
                 ValidateAudience = true,
                 ValidateIssuerSigningKey = true,
                 ValidateLifetime = true,
-                ValidateIssuer = true
+                ValidateIssuer = true,
+                ValidIssuer = identityOptions.Issuer,
             };
         });
 

@@ -4,14 +4,15 @@ services:
   catalogdb:
     container_name: catalogdb
     environment:
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=${POSTGRES_DB}
+      - MYSQL_DATABASE=CatalogDb
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
     restart: always
     ports:
-      - "5433:5432"
+      - "3301:3306"
     volumes:
-      - postgres_catalog:/var/lib/postgresql
+      - mysql_catalog:/var/lib/mysql
   
   microcore.catalog.api:
     container_name: microcore.catalog.api
@@ -19,7 +20,14 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
       - ASPNETCORE_HTTPS_PORTS=8081
-      - ConnectionStrings__Database=Server=catalogdb;Port=5432;Database=${POSTGRES_DB};User Id=${POSTGRES_USER};Password=${POSTGRES_PASSWORD};Include Error Detail=true
+      - ConnectionStrings__Database=Server=catalogdb;Port=3306;Database=CatalogDb;User=${MYSQL_USER};Password=${MYSQL_PASSWORD};
+      - BusOption__Address=rabbitmq
+      - BusOption__Port=5672
+      - BusOption__UserName=${RABBITMQ_DEFAULT_USER}
+      - BusOption__Password=${RABBITMQ_DEFAULT_PASS}
+      - IdentityOption__Address=http://keycloak:8080/realms/MicroCoreTenant
+      - IdentityOption__Issuer=http://localhost:8080/realms/MicroCoreTenant
+      - IdentityOption__Audience=microcore-client
     ports:
       - "6000:8080"
       - "6060:8081"
@@ -28,24 +36,23 @@ services:
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
-  
 
   basketdb:
     container_name: basketdb
     environment:
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=BasketDb 
+      - MYSQL_DATABASE=BasketDb
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
     restart: always
     ports:
-      - "5434:5432" 
+      - "3302:3306" 
     volumes:
-      - postgres_basket:/var/lib/postgresql
+      - mysql_basket:/var/lib/mysql
 
   basketredis:
     container_name: basketredis
     restart: always
-    image: redis:alpine
     ports:
       - "6379:6379" 
     volumes:
@@ -57,9 +64,19 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
       - ASPNETCORE_HTTPS_PORTS=8081
-      - ConnectionStrings__Database=Server=basketdb;Port=5432;Database=BasketDb;User Id=${POSTGRES_USER};Password=${POSTGRES_PASSWORD};Include Error Detail=true
+      - ConnectionStrings__Database=Server=basketdb;Port=3306;Database=BasketDb;User=${MYSQL_USER};Password=${MYSQL_PASSWORD};
       - ConnectionStrings__Redis=basketredis:6379
-      - BusOption__Address=rabbitmq
+      - AddressUrlOption__OrderUrl=http://microcore.order.api:8080
+      - GrpcSettings__DiscountUrl=http://microcore.discount.grpc:8080
+      - BusOption__Address=rabbitmq      
+      - BusOption__Port=5672
+      - BusOption__UserName=${RABBITMQ_DEFAULT_USER}
+      - BusOption__Password=${RABBITMQ_DEFAULT_PASS}
+      - IdentityOption__Address=http://keycloak:8080/realms/MicroCoreTenant
+      - IdentityOption__Issuer=http://localhost:8080/realms/MicroCoreTenant
+      - Logging__LogLevel__Microsoft.AspNetCore.Authentication=Debug
+      - Logging__LogLevel__Microsoft.AspNetCore.Authorization=Debug
+      - IdentityOption__Audience=microcore-client
     ports:
       - "6010:8080" 
       - "6061:8081" 
@@ -70,64 +87,47 @@ services:
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
- 
 
-  microcore.discount.grpc:
+  discountdb:
+    container_name: discountdb
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_HTTP_PORTS=8080
-      - ASPNETCORE_HTTPS_PORTS=8081
-      - ConnectionStrings__Database=Data Source=discountdb
-    ports:
-      - "6002:8080"
-    volumes:
-      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
-      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
-      - sqlite_discount:/db
-
-  paymentdb:
-    container_name: paymentdb
-    environment:
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=PaymentDb
+      - MYSQL_DATABASE=DiscountDb
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
     restart: always
     ports:
-      - "5435:5432"
+      - "3303:3306"
     volumes:
-      - postgres_payment:/var/lib/postgresql
+      - mysql_discount:/var/lib/mysql
 
-  microcore.payment.api:
-    container_name: microcore.payment.api
+  microcore.discount.grpc:
+    container_name: microcore.discount.grpc
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
       - ASPNETCORE_HTTPS_PORTS=8081
-      - ConnectionStrings__Database=Server=paymentdb;Port=5432;Database=PaymentDb;User Id=${POSTGRES_USER};Password=${POSTGRES_PASSWORD};Include Error Detail=true
-      - BusOption__Address=rabbitmq
+      - ConnectionStrings__Database=Server=discountdb;Port=3306;Database=DiscountDb;User=${MYSQL_USER};Password=${MYSQL_PASSWORD};
     ports:
-      - "6004:8080"
-      - "6064:8081"
+      - "6002:8080"
     depends_on:
-      - paymentdb
-      - rabbitmq
+      - discountdb
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
-
 
   orderdb:
     container_name: orderdb
-    user: root 
     environment:
-      - ACCEPT_EULA=Y
-      - SA_PASSWORD=${SA_PASSWORD}
+      - MYSQL_DATABASE=OrderDb
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
     restart: always
     ports:
-      - "1433:1433"
+      - "3304:3306"
     volumes:
-      - mssql_order:/var/opt/mssql
-
+      - mysql_order:/var/lib/mysql
 
   microcore.order.api:
     container_name: microcore.order.api
@@ -135,8 +135,15 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
       - ASPNETCORE_HTTPS_PORTS=8081
-      - ConnectionStrings__Database=Server=orderdb;Database=OrderDb;User Id=sa;Password=${SA_PASSWORD};TrustServerCertificate=True
-      - BusOption__Address=rabbitmq
+      - ConnectionStrings__Database=Server=orderdb;Port=3306;Database=OrderDb;User=${MYSQL_USER};Password=${MYSQL_PASSWORD};
+      - AddressUrlOption__PaymentUrl=http://microcore.payment.api:8080
+      - BusOption__Address=rabbitmq      
+      - BusOption__Port=5672
+      - BusOption__UserName=${RABBITMQ_DEFAULT_USER}
+      - BusOption__Password=${RABBITMQ_DEFAULT_PASS}
+      - IdentityOption__Address=http://keycloak:8080/realms/MicroCoreTenant
+      - IdentityOption__Issuer=http://localhost:8080/realms/MicroCoreTenant
+      - IdentityOption__Audience=microcore-client
     ports:
       - "6003:8080"
       - "6063:8081"
@@ -147,20 +154,54 @@ services:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
 
+  paymentdb:
+    container_name: paymentdb
+    environment:
+      - MYSQL_DATABASE=PaymentDb
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    restart: always
+    ports:
+      - "3305:3306"
+    volumes:
+      - mysql_payment:/var/lib/mysql
+
+  microcore.payment.api:
+    container_name: microcore.payment.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTPS_PORTS=8081
+      - ConnectionStrings__Database=Server=paymentdb;Port=3306;Database=PaymentDb;User=${MYSQL_USER};Password=${MYSQL_PASSWORD};
+      - BusOption__Address=rabbitmq
+      - IdentityOption__Address=http://keycloak:8080/realms/MicroCoreTenant
+      - IdentityOption__Issuer=http://localhost:8080/realms/MicroCoreTenant
+      - IdentityOption__Audience=microcore-client
+    ports:
+      - "6004:8080"
+      - "6064:8081"
+    depends_on:
+      - paymentdb
+      - rabbitmq
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+
   keycloakdb:
     container_name: keycloakdb
     environment:
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=KeycloakDb
+      - MYSQL_DATABASE=KeycloakDb
+      - MYSQL_USER=${MYSQL_USER} 
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD} 
     restart: always
     ports:
-      - "5436:5432" 
+      - "3307:3306" 
     volumes:
-      - postgres_keycloak:/var/lib/postgresql/data
+      - mysql_keycloak_data:/var/lib/mysql 
 
   keycloak:
-    restart: always
     container_name: keycloak
     environment:
       - KC_HOSTNAME_PORT=8080
@@ -171,12 +212,12 @@ services:
       - KC_HEALTH_ENABLED=true
       - KEYCLOAK_ADMIN=${KEYCLOAK_ADMIN}
       - KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASSWORD}
-      - KC_DB=postgres
-      - KC_DB_URL=jdbc:postgresql://keycloakdb:5432/KeycloakDb 
-      - KC_DB_USERNAME=${POSTGRES_USER}
-      - KC_DB_PASSWORD=${POSTGRES_PASSWORD}
+      - KC_DB=mysql 
+      - KC_DB_URL=jdbc:mysql://keycloakdb:3306/KeycloakDb?characterEncoding=UTF-8
+      - KC_DB_USERNAME=${MYSQL_USER}
+      - KC_DB_PASSWORD=${MYSQL_PASSWORD}
     ports:
-      - "8080:8080" 
+      - "8080:8080"
     depends_on:
       - keycloakdb
  
@@ -197,6 +238,27 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
+      - ReverseProxy__Routes__basket.route__ClusterId=basket.cluster
+      - ReverseProxy__Routes__basket.route__Match__Path=/api/baskets/{**catch-all}
+
+      - ReverseProxy__Routes__catalog.route__ClusterId=catalog.cluster
+      - ReverseProxy__Routes__catalog.route__Match__Path=/api/catalogs/{**catch-all}
+
+      - ReverseProxy__Routes__order.route__ClusterId=order.cluster
+      - ReverseProxy__Routes__order.route__Match__Path=/api/orders/{**catch-all}
+
+      - ReverseProxy__Routes__payment.route__ClusterId=payment.cluster
+      - ReverseProxy__Routes__payment.route__Match__Path=/api/payments/{**catch-all}
+
+      - ReverseProxy__Routes__discount.route__ClusterId=discount.cluster
+      - ReverseProxy__Routes__discount.route__Match__Path=/api/discounts/{**catch-all}
+
+      - ReverseProxy__Clusters__basket.cluster__Destinations__destination1__Address=http://microcore.basket.api:8080
+      - ReverseProxy__Clusters__catalog.cluster__Destinations__destination1__Address=http://microcore.catalog.api:8080
+      - ReverseProxy__Clusters__discount.cluster__Destinations__destination1__Address=http://microcore.discount.grpc:8080
+      - ReverseProxy__Clusters__file.cluster__Destinations__destination1__Address=http://microcore.catalog.api:8080
+      - ReverseProxy__Clusters__order.cluster__Destinations__destination1__Address=http://microcore.order.api:8080
+      - ReverseProxy__Clusters__payment.cluster__Destinations__destination1__Address=http://microcore.payment.api:8080
     ports:
       - "5000:8080"
     depends_on:
@@ -207,5 +269,3 @@ services:
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
-
- 

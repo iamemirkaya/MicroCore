@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Shared\MicroCore.Bus\MicroCore.Bus.csproj" />
     <ProjectReference Include="..\MicroCore.Order.Domain\MicroCore.Order.Domain.csproj" />
   </ItemGroup>
 

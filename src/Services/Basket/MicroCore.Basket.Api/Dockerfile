@@ -10,6 +10,7 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["src/Services/Basket/MicroCore.Basket.Api/MicroCore.Basket.Api.csproj", "src/Services/Basket/MicroCore.Basket.Api/"]
+COPY ["src/Shared/MicroCore.Bus/MicroCore.Bus.csproj", "src/Shared/MicroCore.Bus/"]
 COPY ["src/Shared/MicroCore.Shared/MicroCore.Shared.csproj", "src/Shared/MicroCore.Shared/"]
 RUN dotnet restore "./src/Services/Basket/MicroCore.Basket.Api/MicroCore.Basket.Api.csproj"
 COPY . .

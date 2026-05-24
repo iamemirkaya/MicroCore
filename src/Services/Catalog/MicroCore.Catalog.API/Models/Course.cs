@@ -12,6 +12,8 @@ public class Course
 
     public DateTime Created { get; set; }
 
+    public int PurchaseCount { get; set; } = 0;
+
     public Guid CategoryId { get; set; }
     public Category Category { get; set; } = default!;
 

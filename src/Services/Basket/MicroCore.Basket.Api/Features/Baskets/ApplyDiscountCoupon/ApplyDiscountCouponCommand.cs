@@ -2,4 +2,4 @@
 
 namespace MicroCore.Basket.Api.Features.Baskets.ApplyDiscountCoupon;
 
-public record ApplyDiscountCouponCommand(string Coupon, float DiscountRate) : IRequestByServiceResult;
+public record ApplyDiscountCouponCommand(string Coupon) : IRequestByServiceResult;

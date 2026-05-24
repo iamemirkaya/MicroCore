@@ -4,9 +4,11 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddGrpc();
 builder.Services.AddDbContext<DiscountContext>(opts =>
-        opts.UseSqlite(builder.Configuration.GetConnectionString("Database")));
+    opts.UseMySql(builder.Configuration.GetConnectionString("Database"),
+    ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("Database"))));
+
+builder.Services.AddGrpc();
 
 var app = builder.Build();
 
@@ -14,7 +16,7 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<DiscountContext>();
-    dbContext.Database.EnsureCreated();
+    dbContext.Database.Migrate();
 }
 
 app.MapGrpcService<DiscountService>();

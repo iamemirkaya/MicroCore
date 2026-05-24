@@ -1,5 +1,6 @@
-﻿using MicroCore.Basket.Api.Features.Baskets.AddBasketItem;
+﻿ using MicroCore.Basket.Api.Features.Baskets.AddBasketItem;
 using MicroCore.Basket.Api.Features.Baskets.ApplyDiscountCoupon;
+using MicroCore.Basket.Api.Features.Baskets.CheckoutBasket;
 using MicroCore.Basket.Api.Features.Baskets.DeleteBasketItem;
 using MicroCore.Basket.Api.Features.Baskets.GetBasket;
 using MicroCore.Basket.Api.Features.Baskets.RemoveDiscountCoupon;
@@ -16,6 +17,7 @@ public static class BasketEndpointExt
             .DeleteBasketItemGroupItemEndpoint()
             .GetBasketGroupItemEndpoint()
             .ApplyDiscountCouponGroupItemEndpoint()
+            .CheckoutBasketGroupEndpoint()
             .RemoveDiscountCouponGroupItemEndpoint().RequireAuthorization("Password"); 
 
     }

@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+option csharp_namespace = "MicroCore.Discount.Grpc";
+
+package discount;
+
+
+import "google/protobuf/timestamp.proto";
+
+service DiscountProtoService {
+    rpc GetDiscountByCode (GetDiscountByCodeRequest) returns (DiscountModel);
+    rpc CreateDiscount (CreateDiscountRequest) returns (DiscountModel);
+}
+
+message GetDiscountByCodeRequest {
+    string code = 1;
+}
+
+message DiscountModel {
+    string id = 1;
+    string userId = 2;
+    float rate = 3;
+    string code = 4;
+    google.protobuf.Timestamp created = 5;
+    google.protobuf.Timestamp updated = 6;
+    google.protobuf.Timestamp expired = 7;
+}
+
+message CreateDiscountRequest {
+    DiscountModel discount = 1;
+}

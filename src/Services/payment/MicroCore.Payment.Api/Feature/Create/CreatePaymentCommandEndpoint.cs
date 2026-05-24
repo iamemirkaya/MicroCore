@@ -8,7 +8,7 @@ public static class CreatePaymentCommandEndpoint
 {
     public static RouteGroupBuilder CreatePaymentGroupItemEndpoint(this RouteGroupBuilder group)
     {
-        group.MapPost("",
+        group.MapPost("create",
                 async ([FromBody] CreatePaymentCommand createPaymentCommand, IMediator mediator) =>
                 (await mediator.Send(createPaymentCommand)).ToGenericResult())
             .WithName("create")

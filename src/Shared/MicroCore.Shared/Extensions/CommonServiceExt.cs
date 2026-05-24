@@ -16,7 +16,7 @@ public static class CommonServiceExt
 
         services.AddFluentValidationAutoValidation();
         services.AddValidatorsFromAssemblyContaining(assembly);
-        services.AddScoped<IIdentityService, IdentityServiceFake>();
+        services.AddScoped<IIdentityService, IdentityService>();
         return services;
     }
 }
