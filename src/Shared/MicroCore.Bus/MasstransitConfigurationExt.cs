@@ -11,7 +11,7 @@ public static class MasstransitConfigurationExt
     public static IServiceCollection AddCommonMasstransitExt(this IServiceCollection services,
         IConfiguration configuration, Assembly? assembly = null)
     {
-        var busOptions = configuration.GetSection(nameof(BusOption)).Get<BusOption>()!;
+        var busOptions = configuration.GetSection("AwsBusOption").Get<AwsBusOption>()!;
 
         services.AddMassTransit(configure =>
         {
@@ -20,16 +20,35 @@ public static class MasstransitConfigurationExt
                 configure.AddConsumers(assembly);
             }
 
-            configure.UsingRabbitMq((ctx, cfg) =>
+            if (busOptions.Provider.Equals("AmazonSqs", StringComparison.OrdinalIgnoreCase))
             {
-                cfg.Host(new Uri($"rabbitmq://{busOptions.Address}:{busOptions.Port}"), host =>
+                configure.UsingAmazonSqs((ctx, cfg) =>
                 {
-                    host.Username(busOptions.UserName);
-                    host.Password(busOptions.Password);
-                });
+                    cfg.Host(busOptions.Region, host =>
+                    {
+                        if (!string.IsNullOrEmpty(busOptions.AccessKey) && !string.IsNullOrEmpty(busOptions.SecretKey))
+                        {
+                            host.AccessKey(busOptions.AccessKey);
+                            host.SecretKey(busOptions.SecretKey);
+                        }
+                    });
 
-                cfg.ConfigureEndpoints(ctx);
-            });
+                    cfg.ConfigureEndpoints(ctx);
+                });
+            }
+            else
+            {
+                configure.UsingRabbitMq((ctx, cfg) =>
+                {
+                    cfg.Host(new Uri($"rabbitmq://{busOptions.Address}:{busOptions.Port}"), host =>
+                    {
+                        host.Username(busOptions.UserName);
+                        host.Password(busOptions.Password);
+                    });
+
+                    cfg.ConfigureEndpoints(ctx);
+                });
+            }
         });
 
         return services;
